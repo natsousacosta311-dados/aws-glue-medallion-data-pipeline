@@ -1,0 +1,12 @@
+# Dependências locais (testes, linting, notebooks)
+# AWS Glue roda PySpark gerenciado — não instalar pyspark aqui para produção
+
+boto3==1.34.0
+pyspark==3.3.0          # apenas para testes locais / type checking
+pytest==7.4.0
+pytest-mock==3.12.0
+black==23.12.0           # formatter
+flake8==6.1.0            # linter
+pandas==2.1.0            # notebooks exploratórios
+jupyter==1.0.0
+pyarrow==14.0.0          # leitura de Parquet local
