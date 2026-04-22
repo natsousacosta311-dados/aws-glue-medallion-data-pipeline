@@ -19,6 +19,38 @@ O projeto transforma dados brutos de vendas de um e-commerce em tabelas analíti
 - **Confiabilidade** — Validação preventiva, logging estruturado e tratamento de erros
 
 ---
+# 🧩 Arquitetura
+
+Este projeto segue o padrão Medallion Architecture:
+
+- 🟤 Bronze: dados brutos (raw) armazenados no S3
+- ⚪ Silver: dados tratados, limpos e padronizados
+- 🟡 Gold: dados agregados prontos para análise
+
+## 📊 Camada Gold (Consumo)
+
+Os dados da camada Gold estão disponíveis para consulta via Amazon Athena.
+
+### Exemplo de consulta:
+
+```sql
+SELECT 
+    estado,
+    COUNT(*) AS total_clientes
+FROM gold_clientes
+GROUP BY estado
+ORDER BY total_clientes DESC;
+
+### 🔄 Orquestração
+
+O pipeline é orquestrado da seguinte forma:
+
+1. Upload de arquivos no S3 (camada Bronze)
+2. Trigger (evento S3) dispara o job Glue Bronze
+3. Job Bronze transforma e envia para Silver
+4. Job Silver aplica regras de qualidade e envia para Gold
+5. Camada Gold é consumida via Athena
+
 
 ## 🎯 Problema de Negócio
 
